@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Şekilli Yazı Yazma & Sembollü Biyografi Oluşturucu</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            color: #38bdf8;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 10px;
+            color: #fff;
+            padding: 12px;
+            font-size: 1rem;
+            resize: none;
+            outline: none;
+            transition: 0.3s;
+        }
+        textarea:focus {
+            border-color: #38bdf8;
+        }
+        .results {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .card {
+            background: #334155;
+            padding: 14px 18px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            word-break: break-all;
+        }
+        .card span {
+            font-size: 1.1rem;
+            color: #f1f5f9;
+            padding-right: 10px;
+        }
+        .copy-btn {
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .copy-btn:hover {
+            background: #7dd3fc;
+        }
+        /* AdSense Reklam Alanı Temsili */
+        .ad-space {
+            margin-top: 25px;
+            padding: 15px;
+            background: #0f172a;
+            border: 1px dashed #475569;
+            border-radius: 8px;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Şekilli Yazı Jeneratörü</h1>
+    <p class="subtitle">Instagram, WhatsApp ve TikTok için harika fontlar oluşturun.</p>
+    
+    <textarea id="userInput" placeholder="Metninizi buraya yazın..." oninput="generateFonts()"></textarea>
+
+    <!-- Reklam Alanı (Google AdSense Kodu Buraya Gelecek) -->
+    <div class="ad-space">
+        -- Reklam Alanı --
+    </div>
+
+    <div class="results" id="resultsList">
+        <!-- Şekilli metinler buraya yüklenecek -->
+    </div>
+</div>
+
+<script>
+const fonts = {
+    bold: (text) => text.replace(/[a-zA-Z]/g, c => String.fromCodePoint(c.charCodeAt(0) + (c >= 'a' ? 120205 : 120199))),
+    italic: (text) => text.replace(/[a-zA-Z]/g, c => String.fromCodePoint(c.charCodeAt(0) + (c >= 'a' ? 120257 : 120251))),
+    monospace: (text) => text.replace(/[a-zA-Z0-9]/g, c => {
+        let code = c.charCodeAt(0);
+        if (c >= 'a' && c <= 'z') return String.fromCodePoint(code + 120367);
+        if (c >= 'A' && c <= 'Z') return String.fromCodePoint(code + 120361);
+        if (c >= '0' && c <= '9') return String.fromCodePoint(code + 120774);
+        return c;
+    }),
+    squared: (text) => text.toUpperCase().replace(/[A-Z]/g, c => String.fromCodePoint(c.charCodeAt(0) + 127247)),
+    circled: (text) => text.replace(/[a-zA-Z0-9]/g, c => {
+        let code = c.charCodeAt(0);
+        if (c >= 'a' && c <= 'z') return String.fromCodePoint(code + 9327);
+        if (c >= 'A' && c <= 'Z') return String.fromCodePoint(code + 9275);
+        if (c >= '1' && c <= '9') return String.fromCodePoint(code + 9283);
+        return c;
+    })
+};
+
+function generateFonts() {
+    const input = document.getElementById('userInput').value;
+    const list = document.getElementById('resultsList');
+    list.innerHTML = '';
+
+    if (!input.trim()) return;
+
+    const styles = [
+        { name: 'Kalın', text: fonts.bold(input) },
+        { name: 'İtalik', text: fonts.italic(input) },
+        { name: 'Daktilo', text: fonts.monospace(input) },
+        { name: 'Kutulu (Büyük)', text: fonts.squared(input) },
+        { name: 'Yuvarlak', text: fonts.circled(input) },
+        { name: 'Süslü 1', text: `★彡 ${input} 彡★` },
+        { name: 'Süslü 2', text: `꧁༺ ${input} ༻꧂` },
+        { name: 'Süslü 3', text: `i̶n̶p̶u̶t̶`.replace('input', input) },
+        { name: 'Aralıklı', text: input.split('').join(' ') }
+    ];
+
+    styles.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <span>${item.text}</span>
+            <button class="copy-btn" onclick="copyText('${item.text}', this)">Kopyala</button>
+        `;
+        list.appendChild(card);
+    });
+}
+
+function copyText(text, btn) {
+    navigator.clipboard.writeText(text);
+    btn.innerText = 'Kopyalandı!';
+    btn.style.background = '#4ade80';
+    setTimeout(() => {
+        btn.innerText = 'Kopyala';
+        btn.style.background = '#38bdf8';
+    }, 1500);
+}
+</script>
+
+</body>
+</html>
